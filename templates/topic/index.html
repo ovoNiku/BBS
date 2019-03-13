@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/static/images/bitbug_favicon%20.ico" type="image/x-icon"/>
+    <title>biubiu | topic</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/lib/editor/editor.css">
+    <link rel="stylesheet" href="/static/lib/webuploader/webuploader.css">
+    <script src="/static/lib/jquery-3.0.0.min.js"></script>
+    <script src="/static/lib/markdownit.js"></script>
+    <script src="/static/lib/webuploader/webuploader.withoutimage.js"></script>
+    <script src="/static/lib/editor/editor.js"></script>
+    <script src="/static/lib/editor/ext.js"></script>
+</head>
+<body style="background: url('/images/back2.jpg') top/cover no-repeat; background-size: 100% 190px;">
+{#    <div class="head-brand">#}
+{#        <img class="back-img" src="/images/head_back.png">#}
+{#    </div>#}
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="container">
+{#            <form id="search_form" class="navbar-search" action="https://cnodejs.org/search">#}
+{#                <input type="text" id="q" name="q" class="search-query span3" value="搜一下" onfocus="this.style.color='#000';#}
+{#this.value='';" style="color: #b4b4b4;">#}
+{#            </form>#}
+            <ul class="nav pull-right">
+                <a class="brand" href="{{ url_for('topic.index', id=user.id ) }}">
+                    <img src="{{ user.img }}" class="user-img">
+                </a>
+                <li><a href="{{ url_for('topic.index', id=user.id) }}">首页</a></li>
+                <li><a href="{{ url_for('message.index') }}">消息</a></li>
+                <li><a href="{{ url_for('user_index.edit', id=user.id) }}">设置</a></li>
+                <li><a href="{{ url_for('index.quit') }}" rel="nofollow">退出</a></li>
+            </ul>
+            <a class="btn btn-navbar" id="responsive-sidebar-trigger">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="head-title">
+    <img src="/images/title.png">
+</div>
+<div id="main">
+    <div id="sidebar">
+        <div class="panel">
+            <div class="inner">
+                <div class="user_card">
+                    <div>
+                        <a class="user_avatar" href="{{ url_for('user_index.index', id=user.id) }}">
+                            <img src="{{ user.img }}" title="{{ user.username }}">
+                        </a>
+                        <span class="user_name"><a class="auther-name"
+                                                   href="{{ url_for('user_index.index', id=user.id) }}">{{ user.username }}</a></span>
+
+                        <div class="space clearfix"></div>
+                        <span class="signature">
+    “
+
+        {{ user.signature }}
+
+    ”
+</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="inner">
+                <a href="/topic/new?board_id={{ bid }}" class="create_topic_btn">
+                    <span class="span-success">发布话题</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="panel">
+            <div class="header">
+                <a href="/topic"
+                   class="topic-tab" id="tab-all">
+                    全部的帖子
+                </a>
+                {% for b in bs %}
+                    <a href="/topic?board_id={{ b.id }}"
+                       class="topic-tab" id="tab-{{ b.id }}">
+                        {{ b.title }}
+                    </a>
+                {% endfor %}
+            </div>
+            <div class="inner no-padding">
+                <div class="img-cell" id="{{ bid }}" style="display: none"></div>
+                <div id="topic_list">
+                    {% for t in ms %}
+                        {% set u = t.user() %}
+                        <div>
+                            <a class="user_avatar pull-left"
+                               href="{{ url_for('user_index.index', id=t.user_id) }}">
+                                <img src="{{ u.img }}">
+                            </a>
+                        </div>
+                        <div class="cell">
+                            <div class="topic_title_wrapper">
+                                <a class="topic_title" href="{{ url_for('topic.detail', id=t.id) }}">
+                                    {{ t.title }}
+                                </a>
+
+{#                                <a class="topic_title pull-right"#}
+{#                                   href="{{ url_for('topic.delete', id=t.id, token=token) }}">#}
+{#                                    删除#}
+{#                                </a>#}
+                            </div>
+                            <div class="topic-block">
+                                <p>{{ t.content | truncate(300) }}</p>
+                            </div>
+                            <div class="topic-time">
+                                    <span class="counts">
+<span class="count_of_replies" title="回复数">
+  {{ t.replies() | count }}
+</span>
+<span class="count_seperator">/</span>
+<span class="count_of_visits" title="点击数">
+  {{ t.views }}
+</span>
+</span>
+                                <span class="topic-from">来自<a>
+                                    {{ u.username }}
+                                </a></span>
+                                <span>{{ (t.created_time | formatte_time) | date_time }}</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="back-up"
+         style='position:fixed;bottom:20px;right: 20px'>
+        <img src="/images/回到顶部.png" style="height: 30px;width: 30px">
+    </div>
+</div>
+<script>
+    var e = function (sel) {
+        return document.querySelector(sel)
+    }
+    var a = function () {
+        var b = e('.img-cell')
+        console.log('bbb', b)
+        id = b.id
+        console.log('id', id);
+        if (id == -1) {
+            all = e('#tab-all')
+            all.style.backgroundColor = 'dodgerblue'
+            all.style.color = 'white'
+        } else if (id == 1) {
+            one = e('#tab-1')
+            one.style.backgroundColor = 'dodgerblue'
+            one.style.color = 'white'
+        } else {
+            two = e('#tab-2')
+            two.style.backgroundColor = 'dodgerblue'
+            two.style.color = 'white'
+        }
+    }
+
+    var __main = function () {
+        a()
+    }
+
+    __main()
+</script>
+
+</body>
+</html>

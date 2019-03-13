@@ -1,0 +1,25 @@
+{% extends 'topic_model.html' %}
+{% block tabs %}
+    <div class='tabs'>
+        <a id="first-tab" href="{{ url_for("topic.detail", id=topic.id) }}">回复</a>
+        <a class="on" href="like.html">赞</a>
+    </div>
+    {% set ls = topic.likes() %}
+    {% for l in ls %}
+        {% set u = l.user() %}
+        <div class='cell like-area'>
+            <div class='author-content'>
+                <div class="pic-content">
+                    <img class="pic" src="{{ u.img }}"/>
+                </div>
+                <div class='user-content'>
+                        <a class="like-content" href="{{ url_for('user_index.index', id=u.id) }}">
+                            {{ u.username }}
+                        </a>
+                        赞了这篇文章
+                        <span class="pubtime">{{ l.updated_time | formatte_time }}</span>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

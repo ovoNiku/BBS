@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>biubiu | {{ topic.title }}</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="//cdn.bootcss.com/prism/1.8.0/themes/prism.css" rel="stylesheet">
+</head>
+<body>
+<div class="navbar" style="background-color: hsla(0, 0%, 100%, .4)">
+    <div class="navbar-inner">
+        <div class="container">
+{#            <form id="search_form" class="navbar-search" action="https://cnodejs.org/search">#}
+{#                <input type="text" id="q" name="q" class="search-query span3" value="搜一下" onfocus="this.style.color='#000';#}
+{#this.value='';" style="color: #b4b4b4;">#}
+{#            </form>#}
+            <ul class="nav pull-right">
+                <li><a href="{{ url_for('topic.index', id=user.id) }}">首页</a></li>
+                <li><a href="{{ url_for('message.index') }}">消息</a></li>
+                <li><a href="{{ url_for('user_index.edit', id=user.id) }}">设置</a></li>
+                <li><a href="{{ url_for('index.index') }}" rel="nofollow">退出</a></li>
+            </ul>
+            <a class="btn btn-navbar" id="responsive-sidebar-trigger">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+        </div>
+    </div>
+</div>
+<div id="main">
+    <div id="sidebar">
+        <div class="panel">
+            {#            <div class="header" style="background-color: white">#}
+            {#                <span class="col_fade" style="font-size: 14px; color: black; padding-left: 45px">作者信息</span>#}
+            {#            </div>#}
+            <div class="inner">
+                <div class="user_card">
+                    <div>
+                        <a class="user_avatar" href="{{ url_for('user_index.index', id=user.id) }}">
+                            <img src="{{ user.img }}" title="{{ user.username }}">
+                        </a>
+                        <span class="user_name"><a class="auther-name"
+                                                   href="{{ url_for('user_index.index', id=user.id) }}">{{ user.username }}</a></span>
+
+                        <div class="space clearfix"></div>
+                        <span class="signature">
+    “
+
+        {{ user.signature }}
+
+    ”
+</span>
+                        {#                        <div style="background-color: #00a1d6;display:block;width: 50px;text-align: center;color: white">#}
+                        {#                            +关注#}
+                        {#                        </div>#}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% block bid %}
+        {% endblock %}
+    </div>
+    <div id="content">
+        <div class='panel'>
+            <div class='header topic_header'>
+        <span class="topic_full_title">
+			{{ topic.title }}
+      	</span>
+                <div class="changes">
+            <span>
+                发布于 {{ topic.created_time | formatte_time }}
+            </span>
+                    <a href="{{ url_for('user_index.index', id=topic.user_id) }}">
+                        {% set u = topic.user() %}
+                        作者 {{ u.username }}
+                    </a>
+                    <span>
+          	    {{ topic.views }} 次浏览
+        	</span>
+
+                    <span>
+                来自 {{ topic.board().title }}
+            </span>
+                </div>
+            </div>
+
+            <div class='inner topic'>
+                <div class='topic_content'>
+                    <div class="markdown-text">{{ topic.content }}</div>
+                </div>
+                <div class="good-bar">
+                    <div class="action-react-like">
+                        {% if l != None %}
+                            <a class="react-add-like"
+                               href="{{ url_for('topic.add_like', id=topic.id) }}">已赞</a>
+                        {% else %}
+                            <a class="react-add"
+                               href="{{ url_for('topic.add_like', id=topic.id) }}">赞</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='panel'>
+            {% block tabs %}
+            {% endblock %}
+        </div>
+    </div>
+    <div class="back-up"
+         style='position:fixed;bottom:20px;right: 20px'>
+        <img src="/images/回到顶部.png" style="height: 30px;width: 30px">
+    </div>
+
+
+</div>
+
+</body>
+
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/css/style.css">
+<script src="https://cdn.bootcss.com/marked/0.3.19/marked.min.js"></script>
+<script src="https://cdn.bootcss.com/prism/1.13.0/prism.js"></script>
+<script src="https://cdn.bootcss.com/prism/1.13.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script>
+    var e = function (sel) {
+        return document.querySelector(sel)
+    }
+
+    var es = function (sel) {
+        return document.querySelectorAll(sel)
+    }
+
+    var markContents = function () {
+        // markdown -> html 的处理放在高亮前面
+        // 因为高亮是针对 html 格式的
+        // lang -> language 不需要转 prism 自动转了
+        var contentDivs = es('.markdown-text')
+        for (var i = 0; i < contentDivs.length; i++) {
+            var contentDiv = contentDivs[i]
+            console.log('pre marked', contentDiv.textContent)
+            var content = marked(contentDiv.textContent)
+            console.log('after marked', content)
+            contentDiv.innerHTML = content
+        }
+    }
+    var goTop = function () {
+        window.addEventListener('scroll', function () {
+            var h = document.documentElement.scrollTop
+            var a = e('.back-up')
+            a.addEventListener('click', function () {
+                scrollTo(0, 0);
+            })
+            if (h > 30) {
+                a.style.display = "block"
+            } else {
+                a.style.display = "none"
+            }
+        })
+    }
+
+    var highlight = function () {
+        // 自动加载对应的语言 不然要手动加入各个语言的 js
+        Prism.plugins.autoloader.languages_path = 'https://cdn.bootcss.com/prism/1.13.0/components/'
+    }
+
+    var __main = function () {
+        markContents()
+        highlight()
+        goTop()
+    }
+
+    __main()
+
+</script>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>profile</title>
+</head>
+<body>
+<h1>用户资料页面</h1>
+<div>
+    {{ user.id }}
+</div>
+<div>
+    {{ user.username }}
+</div>
+
+<div>
+    <div>创建的</div>
+    {% for t in created %}
+        <a href="{{ url_for('topic.detail', id=t.id) }}">{{ t.title }}</a>
+    {% endfor %}
+</div>
+<div>
+    <div>参与的</div>
+    {% for t in replied %}
+        <a href="{{ url_for('topic.detail', id=t.id) }}">{{ t.title }}</a>
+    {% endfor %}
+</div>
+
+<form method="post"
+      action="{{ url_for('.avatar_add')}}"
+      enctype="multipart/form-data"
+>
+    <input type="file" name="avatar">
+    <button type="submit">上传头像</button>
+</form>
+
+<img src="{{ user.image }} ">
+
+</body>
+</html>

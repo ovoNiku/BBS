@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/static/images/bitbug_favicon%20.ico" type="image/x-icon"/>
+    <title>biubiu | @{{ user.username }} 设置</title>
+    <link rel="stylesheet" href="/static/css/edit.css">
+</head>
+<body>
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="{{ url_for('topic.index', id=user.id ) }}">
+                <img src="/images/title.png">
+            </a>
+            {#            <form id="search_form" class="navbar-search" action="https://cnodejs.org/search">#}
+            {#                <input type="text" id="q" name="q" class="search-query span3" value="搜一下" onfocus="this.style.color='#000';#}
+            {#this.value='';" style="color: #b4b4b4;">#}
+            {#            </form>#}
+            <ul class="nav pull-right">
+                <li><a href="{{ url_for('topic.index', id=user.id) }}">首页</a></li>
+                <li><a href="{{ url_for('message.index') }}">消息</a></li>
+                <li><a href="{{ url_for('user_index.edit', id=user.id) }}">设置</a></li>
+                <li><a href="{{ url_for('index.quit') }}" rel="nofollow">退出</a></li>
+            </ul>
+            <a class="btn btn-navbar" id="responsive-sidebar-trigger">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+        </div>
+    </div>
+</div>
+<div id="main">
+    <div id="sidebar">
+        <div class="panel" style="margin-bottom: 0">
+            <div class="header">
+                <span class="col_fade">个人信息</span>
+            </div>
+            <div class="inner">
+                <div class="user_card">
+                    <div>
+                        <a class="user_avatar" href="{{ url_for('user_index.index', id=user.id) }}">
+                            <img src="{{ user.img }}" title="{{ user.username }}">
+                        </a>
+                        <span class="user_name"><a class="auther-name"
+                                                   href="{{ url_for('user_index.index', id=user.id) }}">{{ user.username }}</a></span>
+
+                        <div class="space clearfix"></div>
+                        <span class="signature">
+    “
+
+        {{ user.signature }}
+
+    ”
+</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="panel">
+            <div class="inner">
+                <a href="{{ url_for('topic.new', board_id=-1) }}" class="create_topic_btn">
+                    <span class="span-success">发布话题</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="panel">
+            <div class="header">
+                <ul class="breadcrumb">
+                    <li><a href="{{ url_for('topic.index', id=user.id) }}">主页</a><span class="divider">/</span></li>
+                    <li class="active">设置</li>
+                </ul>
+            </div>
+            <div class="inner">
+                {% if m == 'f' %}
+                    <div class="alert alert-fail">
+                        <strong>保存失败。请检查账号或密码长度是否正确，密码是否输入正确</strong>
+                    </div>
+                {% elif m == 't' %}
+                    <div class="alert alert-success">
+                        <strong>保存成功。</strong>
+                    </div>
+                {% elif m== 'already' %}
+                    <div class="alert alert-fail">
+                        <strong>保存失败。该用户名已存在</strong>
+                    </div>
+                {% endif %}
+                <form id="setting_form" class="form-horizontal" action="{{ url_for('user_index.photo') }}" method="post"
+                      enctype="multipart/form-data">
+                    <div class="control-group">
+                        <label class="control-label" for="name">头像</label>
+                        <div class="controls">
+                            <img src="{{ user.img }}" title="{{ user.username }}" width="200px" height="200px">
+                        </div>
+                        <div class="form-actions">
+                            <span class="fileinput-button">
+                                <input type="file" size="30" name="photo"/>
+                                <input type="submit" value="提交信息" class="button-new" style="margin-top:15px;"/>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+                <form id="setting_form" class="form-horizontal" action="{{ url_for('user_index.update') }}"
+                      method="post">
+                    <input type="hidden" name="id" placeholder="id" value="{{ user.id }}">
+                    <div class="control-group">
+                        <label class="control-label" for="name">用户名</label>
+                        <div class="controls">
+                            <input class="input-xlarge" id="name" name="name" size="30" type="text"
+                                   value="{{ user.username }}">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="signature">个性签名</label>
+                        <div class="controls">
+                            {% if user.signature == None %}
+                                <textarea class="input-xlarge" id="signature" name="signature"
+                                          size="30"></textarea>
+                            {% else %}
+                                <textarea class="input-xlarge" id="signature" name="signature"
+                                          size="30">{{ user.signature }}</textarea>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <input type="hidden" id="action" name="action" value="change_setting">
+                    <input type="hidden" name="_csrf" value="vaGzX1r6-vuVGBYs_BICwGPA5aEYEGdU1cIY">
+
+                    <div class="form-actions">
+                        <input type="submit" class="span-primary submit_btn" data-loading-text="保存中.." value="保存设置">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="header">
+                <span class="col_fade">更改密码</span>
+            </div>
+            <div class="inner">
+                <form id="change_pass_form" class="form-horizontal" action="{{ url_for("user_index.pass_update") }}"
+                      method="post">
+                    <input type="hidden" name="id" placeholder="id" value="{{ user.id }}">
+                    <div class="control-group">
+                        <label class="control-label" for="old_pass">当前密码</label>
+                        <div class="controls">
+                            <input class="input-xlarge" type="password" id="old_pass" name="old_pass" size="30">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="new_pass">新密码</label>
+                        <div class="controls">
+                            <input class="input-xlarge" type="password" id="new_pass" name="new_pass" size="30">
+                        </div>
+                    </div>
+                    <input type="hidden" id="action" name="action" value="change_password">
+                    <input type="hidden" name="_csrf" value="vaGzX1r6-vuVGBYs_BICwGPA5aEYEGdU1cIY">
+
+                    <div class="form-actions">
+                        <input type="submit" class="span-primary submit_btn" data-loading-text="更改中.." value="更改密码">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <div class="back-up"
+         style='position:fixed;bottom:20px;right: 20px'>
+        <img src="/images/回到顶部.png" style="height: 30px;width: 30px">
+    </div>
+</div>
+<script>
+    var e = function (sel) {
+        return document.querySelector(sel)
+    }
+    var goTop = function () {
+        window.addEventListener('scroll', function () {
+            var h = document.documentElement.scrollTop
+            var a = e('.back-up')
+            a.addEventListener('click', function () {
+                scrollTo(0, 0);
+            })
+            if (h > 30) {
+                a.style.display = "block"
+            } else {
+                a.style.display = "none"
+            }
+        })
+    }
+    var __main = function () {
+        goTop()
+    }
+
+    __main()
+</script>
+</body>
+</html>

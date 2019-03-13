@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>biubiu | new</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/lib/editor/editor.css">
+    <link rel="stylesheet" href="/static/lib/webuploader/webuploader.css">
+    <script src="/static/lib/jquery-3.0.0.min.js"></script>
+    <script src="/static/lib/markdownit.js"></script>
+    <script src="/static/lib/webuploader/webuploader.withoutimage.js"></script>
+    <script src="/static/lib/editor/editor.js"></script>
+    <script src="/static/lib/editor/ext.js"></script>
+</head>
+<body>
+<div class="navbar" style="background-color: hsla(0, 0%, 100%, .4)">
+    <div class="navbar-inner">
+        <div class="container">
+{#            <form id="search_form" class="navbar-search" action="https://cnodejs.org/search">#}
+{#                <input type="text" id="q" name="q" class="search-query span3" value="搜一下" onfocus="this.style.color='#000';#}
+{#this.value='';" style="color: #b4b4b4;">#}
+{#            </form>#}
+            <ul class="nav pull-right">
+                <li><a href="{{ url_for('topic.index', id=user.id) }}">首页</a></li>
+                <li><a href="{{ url_for('message.index') }}">消息</a></li>
+                <li><a href="{{ url_for('user_index.edit', id=user.id) }}">设置</a></li>
+                <li><a href="{{ url_for('index.index') }}" rel="nofollow">退出</a></li>
+            </ul>
+            <a class="btn btn-navbar" id="responsive-sidebar-trigger">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+        </div>
+    </div>
+</div>
+<div id="main">
+    <div id="sidebar">
+        <div class="panel">
+            <div class="header">
+                <span class="col_fade">Markdown 语法参考</span>
+            </div>
+            <div class="inner">
+                <ol>
+                    <li><tt>### 单行的标题</tt></li>
+                    <li><tt>**粗体**</tt></li>
+                    <li><tt>`console.log('行内代码')`</tt></li>
+                    <li><tt>```js\n code \n```</tt> 标记代码块</li>
+                    <li><tt>[内容](链接)</tt></li>
+                    <li><tt>![文字说明](图片链接)</tt></li>
+                </ol>
+                <span><a href="https://segmentfault.com/markdown" target="_blank">Markdown 文档</a></span>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="panel">
+            <div class="header">
+                <ul class="breadcrumb">
+                    <li><a href="{{ url_for('topic.index', id=user.id) }}">主页</a><span class="divider">/发布话题</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="inner post">
+                <form id="create_topic_form" method="post" action="{{ url_for('.add', token=token) }}">
+                    <fieldset>
+        <textarea autofocus class='span9' id='title'
+                  name='title' rows='1'
+                  placeholder="标题字数 10 字以上"></textarea>
+                        <span class="tab-selector">选择版块：</span>
+                        <select name="board_id" id="board" required>
+                            {% for b in bs %}
+                                {% if bid == b.id %}
+                                    <option value="{{ b.id }}" selected>{{ b.title }}</option>
+                                {% else %}
+                                    <option value="{{ b.id }}">{{ b.title }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <div class='markdown_editor in_editor'>
+                            <div class='markdown_in_editor'>
+                                <textarea class='editor' name='content' rows='20'
+                                          placeholder='文章支持 Markdown 语法, 请注意标记代码'></textarea>
+                                <div class='editor_buttons'>
+                                    <input type="submit" class='span-primary submit_btn' data-loading-text="提交中"
+                                           value="提交">
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    (function () {
+        var editor = new Editor();
+        editor.render($('.editor')[0]);
+    })();
+</script>
+</body>
+</html>

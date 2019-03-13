@@ -1,0 +1,117 @@
+{% extends 'message_model.html' %}
+{% block list %}
+    {{ super() }}
+    <ul class="menu">
+        <li class="item active">
+            <a href="{{ url_for('message.index') }}"
+               class="router-link-exact-active router-link-active"
+               title="回复我的">回复我的<!----></a>
+        </li>
+        <li class="item">
+            <a href="{{ url_for('message.at') }}" class=""
+               title="@我的">@ 我的<!----></a>
+        </li>
+        <li class="item">
+            <a href="{{ url_for('message.like') }}" class=""
+               title="收到的赞">收到的赞<!----></a>
+        </li>
+{#        <li class="item">#}
+{#            <a href="https://message.bilibili.com/#/whisper" class=""#}
+{#               title="我的消息">我的消息<!----></a>#}
+{#        </li>#}
+    </ul>
+{% endblock %}
+{% block right %}
+    {{ super() }}
+    <div data-v-a92e485c="" class="space-right">
+        <div data-v-a92e485c="" class="space-right-top">
+            <div data-v-a92e485c="" class="title">
+                <div data-v-a92e485c="">回复我的</div><!----></div>
+        </div>
+        <div data-v-a92e485c="" data-no-clip="" class="space-right-bottom ps ps--theme_default"
+             data-ps-id="ec872ee3-48d2-6dde-a1b8-ef956c780f65">
+            <div data-v-a92e485c="" class="router-view" style=""><!---->
+                <div data-v-478ff02c="" data-v-a92e485c="" class="reply">
+                    <div data-v-478ff02c="">
+                        <div>
+                            {% if received == [] %}
+                                <div class="reply-card">
+                                    <b><img class="none" src="/images/none.jpg"/></b>
+                                    <p class="p-none">暂时没有哦~</p>
+                                </div>
+                            {% else %}
+                                {% for r in received %}
+                                    {% set t = r.topic() %}
+                                    {% set u = r.user() %}
+                                    <div class="reply-card">
+                                        <div class="card-top">
+                                            <div class="card-top-left">
+                                                <a title="{{ r.sender_id }}" target="_blank" class="top-avatar"
+                                                   style="background-image: url({{ u.img }});"></a>
+                                            </div>
+                                            <div class="card-top-right">
+                                                <div class="card-name-box">
+                                                    <a title="{{ r.sender_id }}" target="_blank"
+                                                       href="{{ url_for('user_index.index', id=u.id) }}"
+                                                       class="name">{{ u.username }}</a>
+                                                    <span class="reply-item">{{ r.updated_time | formatte_time }}</span>
+                                                </div>
+                                                <div class="reply-content">
+                                                        <span data-v-facdb7ac="" class="text">
+                                                            <a data-v-facdb7ac=""
+                                                               href="{{ url_for('topic.detail', id=t.id ) }}"
+                                                               target="_blank" title="{{ r.content }}"
+                                                               class="a-content">{{ r.content }}</a>
+                                                       </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div data-v-8e07cd72="" data-v-6b669e70="" class="bottom">
+                                            <div data-v-8e07cd72="" data-v-6b669e70="" class="content"><span
+                                                    data-v-facdb7ac="" data-v-8e07cd72="" class="text"
+                                                    data-v-6b669e70=""><a data-v-facdb7ac=""
+                                                                          href="{{ url_for('topic.detail', id=t.id ) }}"
+                                                                          target="_blank" title="{{ t.title }}"
+                                                                          class="link">{{ t.title }}</a>
+                                                <!----><!----><span data-v-facdb7ac="">评价中回复了你</span></span></div>
+                                        </div>
+                                        <div data-v-3fc5c1a8="" data-v-141c8088="" data-v-8e07cd72=""
+                                             class="im-popup confirm-popup" data-v-6b669e70=""
+                                             style="display: none;">
+                                            <div data-v-15ef80c0="" data-v-3fc5c1a8=""
+                                                 class="bp-popup-panel p-relative a-move-in-top a-forwards im-popup-shell"
+                                                 style="width: 500px; display: none;">
+                                                <div data-v-15ef80c0="" class="title-ctnr p-relative"><h2
+                                                        data-v-15ef80c0="" class="popup-title">删除</h2></div>
+                                                <div data-v-15ef80c0="" class="popup-content-ctnr">
+                                                    <div data-v-3fc5c1a8="" class="content">
+                                                        <div data-v-141c8088="" class="content-text">
+                                                            删除该条通知后将无法恢复，是否继续？
+                                                        </div>
+                                                    </div>
+                                                    <div data-v-15ef80c0="" class="popup-btn-ctnr t-center">
+                                                        <button data-v-a7d5699c="" data-v-15ef80c0=""
+                                                                class="bl-button panel-btn bl-button--primary bl-button--size">
+                                                            确定
+                                                        </button>
+                                                        <button data-v-a7d5699c="" data-v-15ef80c0=""
+                                                                class="bl-button panel-btn bl-button--ghost bl-button--size">
+                                                            取消
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div data-v-15ef80c0="" role="button" title="关闭面板"
+                                                     class="close-btn p-absolute bg-center bg-no-repeat pointer t-center">
+                                                    <i data-v-15ef80c0="" class="bp-icon-font icon-close"></i></div>
+                                            </div><!----></div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

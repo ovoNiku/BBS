@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>biubiu | message center</title>
+    <link rel="icon" href="/images/bitbug_favicon%20.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/mail.css">
+</head>
+<body>
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="container">
+{#            <form id="search_form" class="navbar-search" action="https://cnodejs.org/search">#}
+{#                <input type="text" id="q" name="q" class="search-query span3" value="搜一下" onfocus="this.style.color='#000';#}
+{#this.value='';" style="color: #b4b4b4;">#}
+{#            </form>#}
+            <ul class="nav pull-right">
+                <a class="brand" id="user-img" href="{{ url_for('topic.index', id=user.id ) }}">
+                    <img src="{{ user.img }}" class="user-img">
+                </a>
+                <li><a href="{{ url_for('topic.index', id=user.id) }}">首页</a></li>
+                <li><a href="{{ url_for('message.index') }}">消息</a></li>
+                <li><a href="{{ url_for('user_index.edit', id=user.id) }}">设置</a></li>
+                <li><a href="{{ url_for('index.index') }}" rel="nofollow">退出</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="link-message">
+    <div data-v-a92e485c="" id="link-message-container" class="">
+        <div data-v-a92e485c="" class="container">
+            <div data-v-a92e485c="" class="space-left">
+                <div data-v-14351c02="" data-v-a92e485c="" class="side-bar">
+                    <div class="center">
+                        <div class="icon"></div>
+                        <div class="m-center">消息中心</div>
+                    </div>
+                    {% block list %}
+                    {% endblock %}
+                    <div data-v-14351c02="" class="divided-line"></div>
+                    <div data-v-14351c02="" class="setting item"><a data-v-14351c02=""
+                                                                    href="https://message.bilibili.com/#/config"
+                                                                    class="" title="消息设置">消息设置</a></div>
+                </div>
+            </div>
+            {% block right %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+</body>
+</html>

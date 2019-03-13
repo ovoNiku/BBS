@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>biubiu | @{{ other.username }}</title>
+    <link rel="stylesheet" href="/static/css/edit.css">
+</head>
+<body>
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="{{ url_for('topic.index', id=user.id ) }}">
+                <img src="/images/title.png">
+            </a>
+{#            <form id="search_form" class="navbar-search" action="https://cnodejs.org/search">#}
+{#                <input type="text" id="q" name="q" class="search-query span3" value="搜一下" onfocus="this.style.color='#000';#}
+{#this.value='';" style="color: #b4b4b4;">#}
+{#            </form>#}
+            <ul class="nav pull-right">
+                <li><a href="{{ url_for('topic.index', id=user.id) }}">首页</a></li>
+                <li><a href="{{ url_for('message.index') }}">消息</a></li>
+                <li><a href="{{ url_for('user_index.edit', id=user.id) }}">设置</a></li>
+                <li>
+                    <a href="{{ url_for('index.index') }}" rel="nofollow">退出</a>
+                </li>
+            </ul>
+            <a class="btn btn-navbar" id="responsive-sidebar-trigger">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+        </div>
+    </div>
+</div>
+<div id="main">
+    <div id="sidebar">
+        <div class="panel" style="margin-bottom: 0">
+            <div class="header">
+                <span class="col_fade">个人信息</span>
+            </div>
+            <div class="inner">
+                <div class="user_card">
+                    <div>
+                        <a class="user_avatar" href="{{ url_for('user_index.index', id=other.id) }}">
+                            <img src="{{ other.img }}" title="{{ other.username }}">
+                        </a>
+                        <span class="user_name"><a class="dark"
+                                                   href="{{ url_for('user_index.index', id=other.id) }}">{{ other.username }}</a></span>
+
+                        <div class="space clearfix"></div>
+                        {% if user.signature == None %}
+                            <span class="signature">
+    “
+
+        这家伙很懒，什么个性签名都没有留下。
+
+    ”
+</span>
+                        {% elif (user.signature | count) == 0 %}
+                            <span class="signature">
+    “
+
+        这家伙很懒，什么个性签名都没有留下。
+
+    ”
+</span>
+                        {% else %}
+                            <span class="signature">
+    “
+
+        {{ user.signature }}
+
+    ”
+</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="inner">
+                <a href="{{ url_for('topic.new', board_id=-1) }}" class="create_topic_btn">
+                    <span class="span-success">发布话题</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="panel">
+            <div class="header">
+                <ul class="breadcrumb">
+                    <li><a href="{{ url_for('topic.index', id=user.id) }}">主页</a><span class="divider">/</span></li>
+                </ul>
+            </div>
+            <div class="inner userinfo">
+                <div class="user_big_avatar">
+                    <img src="{{ other.img }}" class="user_avatar"
+                         title="{{ other.username }}">
+                </div>
+                <div class="user_profile">
+                    <ul class="unstyled">
+                    </ul>
+                </div>
+                <p class="col_fade" id="gua-time" data-created_time="{{ other.created_time }}">注册时间</p>
+                            <p class="col_fade">发表过{{ ms | count }}篇文章</p>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="header">
+                <span class="col_fade">最近创建的话题</span>
+            </div>
+            {% if (ms | count) == 0 %}
+                <div class="inner">
+                    <p>无话题</p>
+                </div>
+            {% else %}
+                {% for t in ms %}
+                    {% set a = (t.replies() | myfirst) %}
+                    <div class="cell">
+                        <a class="user_avatar pull-left">
+                            <img src="{{ other.img }}" title="{{ other.username }}">
+                        </a>
+                        <span class="reply_count pull-left">
+
+    <span class="count_of_replies" title="回复数">
+      {{ t.replies() | count }}
+    </span>
+    <span class="count_seperator">/</span>
+    <span class="count_of_visits" title="点击数">
+      {{ t.views }}
+    </span>
+  </span>
+                        <span class="reply_count pull-left">
+
+  </span>
+                        <a class="last_time pull-right">
+                            {% if a == None %}
+                                <div></div>
+                            {% else %}
+                                {% set u = a.user() %}
+                                <img class="user_small_avatar" src="{{ u.img }}">
+                            {% endif %}
+                            <span class="gua-time" data-created_time="{{ t.updated_time }}"></span>
+                        </a>
+                        <div class="topic_title_wrapper">
+                            <a class="topic_title" href="{{ url_for('topic.detail', id=t.id) }}"
+                               title="{{ t.title }}">
+                                {{ t.title }}
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="panel">
+            <div class="header">
+                <span class="col_fade">最近参与的话题</span>
+            </div>
+            {% if (ts | count) == 0 %}
+                <div class="inner">
+                    <p>无话题</p>
+                </div>
+            {% else %}
+                {% for t in ts %}
+                    {% set user = t.user() %}
+                    <div class="cell">
+                        <a class="user_avatar pull-left" href=" {{ url_for('user_index.index', id=t.id) }} ">
+                            <img src="{{ user.img }}">
+                        </a>
+                        <span class="reply_count pull-left">
+        <span class="count_of_replies" title="回复数">
+          {{ t.replies() | count }}
+        </span>
+        <span class="count_seperator">/</span>
+        <span class="count_of_visits" title="点击数">
+          {{ t.views }}
+        </span>
+      </span>
+                        {% set r = t.replies()[0] %}
+                        {% set u = r.user() %}
+                        <a class="last_time pull-right" href="{{ url_for('user_index.index', id=u.id) }}">
+                            <img class="user_small_avatar"
+                                 src="{{ u.img }}"/>
+                            <span class="gua-time" data-created_time="{{ t.updated_time }}"></span>
+                        </a>
+                        <div class="topic_title_wrapper">
+                            <a class="topic_title" href="{{ url_for('topic.detail', id=t.id) }}"
+                               title="{{ t.title }}">
+                                {{ t.title }}
+                            </a>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="back-up"
+         style='position:fixed;bottom:20px;right: 20px'>
+        <img src="/images/回到顶部.png" style="height: 30px;width: 30px">
+    </div>
+</div>
+
+<script>
+    var e = function (sel) {
+        return document.querySelector(sel)
+    }
+    var es = function (sel) {
+        return document.querySelectorAll(sel)
+    }
+    var registerTimer = function () {
+        setInterval(function () {
+            var times = es('.gua-time')
+            for (var i = 0; i < times.length; i++) {
+                var t = times[i]
+                var time = Number(t.dataset.created_time)
+                var now = Math.floor(new Date() / 1000)
+                var delta = now - time
+                var s = `${delta} 秒前`
+                t.innerText = s
+            }
+        }, 1000)
+        setInterval(function () {
+            var times = es('#gua-time')
+            for (var i = 0; i < times.length; i++) {
+                var t = times[i]
+                var time = Number(t.dataset.created_time)
+                var now = Math.floor(new Date() / 1000)
+                var delta = now - time
+                var s = `注册时间 ${delta} 秒前`
+                t.innerText = s
+            }
+        }, 1000)
+    }
+    var goTop = function () {
+        window.addEventListener('scroll', function () {
+            var h = document.documentElement.scrollTop
+            var a = e('.back-up')
+            a.addEventListener('click', function () {
+                scrollTo(0, 0);
+            })
+            if (h > 30) {
+                a.style.display = "block"
+            } else {
+                a.style.display = "none"
+            }
+        })
+    }
+    var __main = function () {
+        registerTimer()
+        goTop()
+    }
+
+    __main()
+
+</script>
+</body>
+</html>

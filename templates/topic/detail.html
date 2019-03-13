@@ -1,0 +1,45 @@
+{% extends 'topic_model.html' %}
+{% block tabs %}
+    <div class='tabs'>
+        <a class="on" id="first-tab" href="detail.html">回复</a>
+        <a href="{{ url_for('topic.detail_like', id=topic.id) }}">赞</a>
+    </div>
+    {% for r in topic.replies() %}
+        {% set u = r.user() %}
+        <div class='cell reply_area reply_item'>
+            <div class='author_content'>
+                <div class="user-img">
+                    <a href="{{ url_for('user_index.index', id=u.id) }}">
+                        <img src="{{ u.img }}">
+                    </a>
+                </div>
+                <div class='user_info'>
+                    <a class='dark reply_author'
+                       href="{{ url_for('user_index.index', id=u.id) }}">
+                        {{ u.username }}
+                    </a>
+                    <a class="reply-time">
+                        {#                        {{ loop.index }}楼 / {{ loop.length }}楼 •#}
+                        <span class="gua-time" id="{{ r.ct }}">
+                            {{ r.created_time | formatte_time }}</span>
+                    </a>
+                </div>
+            </div>
+            <div class='reply_content from-leiwei1991'>
+                <div class="markdown-text">{{ r.content | safe }}</div>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="comment-send cell">
+        <div class="user-img">
+            <img class="user-head" src="{{ user.img }}">
+        </div>
+        <div>
+            <form action="{{ url_for('reply.add') }}" method="post">
+                <input type="hidden" name="topic_id" value="{{ topic.id }}">
+                <textarea name="content" class="add-reply" placeholder="请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论。"></textarea>
+                <button class="comment-submit">添加回复</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
