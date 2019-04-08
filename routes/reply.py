@@ -16,9 +16,6 @@ main = Blueprint('reply', __name__)
 
 
 def users_from_content(content):
-    # 内容 @123 内容
-    # 如果用户名含有空格 就不行了 @name 123
-    # 'a b c' -> ['a', 'b', 'c']
     parts = content.split()
     users = []
 
