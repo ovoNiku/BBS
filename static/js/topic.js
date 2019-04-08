@@ -8,14 +8,9 @@ var es = function (sel) {
 
 var markContents = function () {
     var contentDivs = es('.markdown-text')
-//    var guaMarkdowns = es('.gua-markdown')
     for (var i = 0; i < contentDivs.length; i++) {
         var contentDiv = contentDivs[i]
-//        var guaMarkdown = guaMarkdowns[i]
-        // 掩饰注入攻击
-//         var content = marked(contentDiv.textContent)
         var content = marked(contentDiv.textContent)
-        // console.log(content, contentDiv.innerHTML)
         contentDiv.innerHTML = content
     }
 }
@@ -30,7 +25,7 @@ var highlight = function () {
 
 var registerTimer = function () {
     setInterval(function () {
-        var times = es('.gua-time')
+        var times = es('.niku-time')
         for (var i = 0; i < times.length; i++) {
             var t = times[i]
             var time = Number(t.id)

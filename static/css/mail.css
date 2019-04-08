@@ -1,3 +1,4 @@
+
 #link-message-container[data-v-a92e485c] {
     width: 100%
 }
@@ -3412,7 +3413,7 @@ html {
 }
 
 body {
-    background: url('/images/back.jpg') top/cover no-repeat fixed;
+    background: url('/images/message_back.jpg') top/cover no-repeat fixed;
     font-size: 12px;
     line-height: 12px;
     color: #666;

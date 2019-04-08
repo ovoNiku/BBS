@@ -1485,7 +1485,7 @@ textarea.editor {
     border: 1px solid #FAD5B5;
     color: #CA6445;
     background-color: #FBE9D9;
-    background-image: url(" /images/goodjob.png");
+    background-image: url("/images/like.png");
     background-position: 5px center;
     background-size: 16px 16px;
     background-repeat: no-repeat;
@@ -1501,7 +1501,7 @@ textarea.editor {
     border: 1px solid #FAD5B5;
     color: #FBE9D9;
     background-color: #CA6445;
-    background-image: url("/images/goodjob2.png");
+    background-image: url("/images/like2.png");
     background-position: 5px center;
     background-size: 16px 16px;
     background-repeat: no-repeat;
