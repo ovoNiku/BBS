@@ -101,7 +101,7 @@
                     <ul class="unstyled">
                     </ul>
                 </div>
-                <p class="col_fade" id="gua-time" data-created_time="{{ other.created_time }}">注册时间</p>
+                <p class="col_fade" id="niku-time" data-created_time="{{ other.created_time }}">注册时间</p>
                             <p class="col_fade">发表过{{ ms | count }}篇文章</p>
             </div>
         </div>
@@ -140,7 +140,7 @@
                                 {% set u = a.user() %}
                                 <img class="user_small_avatar" src="{{ u.img }}">
                             {% endif %}
-                            <span class="gua-time" data-created_time="{{ t.updated_time }}"></span>
+                            <span class="niku-time" data-created_time="{{ t.updated_time }}"></span>
                         </a>
                         <div class="topic_title_wrapper">
                             <a class="topic_title" href="{{ url_for('topic.detail', id=t.id) }}"
@@ -182,7 +182,7 @@
                         <a class="last_time pull-right" href="{{ url_for('user_index.index', id=u.id) }}">
                             <img class="user_small_avatar"
                                  src="{{ u.img }}"/>
-                            <span class="gua-time" data-created_time="{{ t.updated_time }}"></span>
+                            <span class="niku-time" data-created_time="{{ t.updated_time }}"></span>
                         </a>
                         <div class="topic_title_wrapper">
                             <a class="topic_title" href="{{ url_for('topic.detail', id=t.id) }}"
@@ -198,7 +198,7 @@
     </div>
     <div class="back-up"
          style='position:fixed;bottom:20px;right: 20px'>
-        <img src="/images/回到顶部.png" style="height: 30px;width: 30px">
+        <img src="/images/go_top.png" style="height: 30px;width: 30px">
     </div>
 </div>
 
@@ -211,7 +211,7 @@
     }
     var registerTimer = function () {
         setInterval(function () {
-            var times = es('.gua-time')
+            var times = es('.niku-time')
             for (var i = 0; i < times.length; i++) {
                 var t = times[i]
                 var time = Number(t.dataset.created_time)
@@ -222,7 +222,7 @@
             }
         }, 1000)
         setInterval(function () {
-            var times = es('#gua-time')
+            var times = es('#niku-time')
             for (var i = 0; i < times.length; i++) {
                 var t = times[i]
                 var time = Number(t.dataset.created_time)

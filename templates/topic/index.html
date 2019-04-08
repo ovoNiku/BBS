@@ -14,20 +14,21 @@
     <script src="/static/lib/editor/editor.js"></script>
     <script src="/static/lib/editor/ext.js"></script>
 </head>
-<body style="background: url('/images/back2.jpg') top/cover no-repeat; background-size: 100% 190px;">
+<body style="background: url('/images/index_back.jpg') top/cover no-repeat; background-size: 100% 190px;">
 {#    <div class="head-brand">#}
 {#        <img class="back-img" src="/images/head_back.png">#}
 {#    </div>#}
 <div class="navbar">
     <div class="navbar-inner">
         <div class="container">
-{#            <form id="search_form" class="navbar-search" action="https://cnodejs.org/search">#}
-{#                <input type="text" id="q" name="q" class="search-query span3" value="搜一下" onfocus="this.style.color='#000';#}
-{#this.value='';" style="color: #b4b4b4;">#}
-{#            </form>#}
+            {#            <form id="search_form" class="navbar-search" action="https://cnodejs.org/search">#}
+            {#                <input type="text" id="q" name="q" class="search-query span3" value="搜一下" onfocus="this.style.color='#000';#}
+            {#this.value='';" style="color: #b4b4b4;">#}
+            {#            </form>#}
             <ul class="nav pull-right">
                 <a class="brand" href="{{ url_for('topic.index', id=user.id ) }}">
                     <img src="{{ user.img }}" class="user-img">
+                </a>
                 </a>
                 <li><a href="{{ url_for('topic.index', id=user.id) }}">首页</a></li>
                 <li><a href="{{ url_for('message.index') }}">消息</a></li>
@@ -108,10 +109,10 @@
                                     {{ t.title }}
                                 </a>
 
-{#                                <a class="topic_title pull-right"#}
-{#                                   href="{{ url_for('topic.delete', id=t.id, token=token) }}">#}
-{#                                    删除#}
-{#                                </a>#}
+                                {#                                <a class="topic_title pull-right"#}
+                                {#                                   href="{{ url_for('topic.delete', id=t.id, token=token) }}">#}
+                                {#                                    删除#}
+                                {#                                </a>#}
                             </div>
                             <div class="topic-block">
                                 <p>{{ t.content | truncate(300) }}</p>
@@ -139,7 +140,7 @@
     </div>
     <div class="back-up"
          style='position:fixed;bottom:20px;right: 20px'>
-        <img src="/images/回到顶部.png" style="height: 30px;width: 30px">
+        <img src="/images/go_top.png" style="height: 30px;width: 30px">
     </div>
 </div>
 <script>
@@ -165,9 +166,23 @@
             two.style.color = 'white'
         }
     }
-
+    var goTop = function () {
+        window.addEventListener('scroll', function () {
+            var h = document.documentElement.scrollTop
+            var a = e('.back-up')
+            a.addEventListener('click', function () {
+                scrollTo(0, 0);
+            })
+            if (h > 30) {
+                a.style.display = "block"
+            } else {
+                a.style.display = "none"
+            }
+        })
+    }
     var __main = function () {
         a()
+        goTop()
     }
 
     __main()
