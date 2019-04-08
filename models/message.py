@@ -6,6 +6,7 @@ from models.base_model import SQLMixin, db
 from models.user import User
 from models.topic import Topic
 
+
 class Messages(SQLMixin, db.Model):
     title = Column(Unicode(50), nullable=False)
     content = Column(UnicodeText, nullable=False)
