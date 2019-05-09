@@ -32,8 +32,13 @@ def date_time(str_time):
     return str
 
 
-class UserModelView(ModelView):
-    column_searchable_list = ('username', 'password')
+def safe_str(str):
+    str = str.replace('&quot;', '"')
+    str = str.replace('&amp;', '&')
+    str = str.replace('&lt;', '<')
+    str = str.replace('&gt;', '>')
+    str = str.replace('&nbsp;', ' ')
+    return str
 
 
 def configured_app():
@@ -58,6 +63,7 @@ def configured_app():
     app.template_filter()(myfirst)
     app.template_filter()(formatte_time)
     app.template_filter()(date_time)
+    app.template_filter()(safe_str)
     return app
 
 
