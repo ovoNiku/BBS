@@ -4,7 +4,6 @@ import config
 import secret
 import time
 from models.base_model import db
-from models.user import User
 
 from routes.index import main as index_routes
 from routes.topic import main as topic_routes
