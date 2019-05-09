@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class='reply_content from-leiwei1991'>
-                <div class="markdown-text">{{ r.content | safe }}</div>
+                <div class="markdown-text">{{ r.content | safe_str }}</div>
             </div>
         </div>
     {% endfor %}
