@@ -101,7 +101,6 @@ def add_like():
     if l is None:
         Like.new(form, u.id)
         send_like(u, user, id, '')
-        return redirect(url_for('.detail_like', id=t.id))
     else:
         Like.delete(l.id)
-        return redirect(url_for('.detail_like', id=t.id))
+    return redirect(url_for('.detail_like', id=t.id))
